@@ -39,7 +39,7 @@ export default class App extends React.Component {
             <View style={styles.container}>
                 <View style={styles.statusBarUnderlay} />
                 <Header month={this.state.month} onChange={this.handleMonthChange}/>
-                <Tabs screenProps={{ month: this.state.month }} />
+                <Tabs screenProps={{ month: this.state.month, allExpenses: this.state.allExpenses }} />
             </View>
         );
     }
