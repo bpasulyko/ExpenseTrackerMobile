@@ -57,9 +57,10 @@ export default class Details extends React.Component {
     }
 
     render() {
+        const items = ['Debit', 'Credit', 'Income'];
         return (
             <View style={styles.container}>
-                <DetailsToggle activeItem={this.state.activeDetailsItem} onPress={this.handleTogglePress} />
+                <DetailsToggle activeItem={this.state.activeDetailsItem} onPress={this.handleTogglePress} items={items} />
                 <View style={styles.tableContainer}>
                     {this.renderTable()}
                 </View>
@@ -75,9 +76,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     tableContainer: {
+        flex: 1,
         alignSelf: 'stretch',
         paddingHorizontal: 10,
-        marginBottom: 75,
+        marginBottom: 10,
     },
     header: {
         backgroundColor: '#2a2a2a',

@@ -6,13 +6,11 @@ import {
   Text,
 } from 'react-native';
 
-const types = ['Debit', 'Credit', 'Income'];
-
-const DetailsToggle = ({ onPress, activeItem }) => {
+const DetailsToggle = ({ onPress, activeItem, items }) => {
     return (
         <View style={styles.container}>
             <View style={styles.buttonGroup}>
-                {types.map((type, key) => {
+                {items.map((type, key) => {
                     const buttonStyles = [styles.button];
                     if (type === activeItem) {
                         buttonStyles.push(styles.active);
