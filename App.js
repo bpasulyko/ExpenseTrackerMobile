@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import { firebaseConfig } from './util/firebaseUtil';
 import MonthSwitcher from './components/MonthSwitcher';
 import Tabs from './navigation/Tabs';
+import Login from './components/Login';
 
 const Header = ({ month, onChange }) => {
     return (
@@ -16,7 +17,7 @@ const Header = ({ month, onChange }) => {
 
 export default class App extends React.Component {
     state = {
-        allExpenses: {},
+        allExpenses: null,
         month: new Date().getMonth(),
     }
 
@@ -25,6 +26,14 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                this.loadExpenses();
+            }
+        });
+    }
+
+    loadExpenses = () => {
         firebase.database().ref('expenses').on('value', (expenses) => {
             this.setState({ allExpenses: expenses.val() });
         });
@@ -34,7 +43,7 @@ export default class App extends React.Component {
         this.setState({ month })
     }
 
-    render() {
+    renderMainContent = () => {
         return (
             <View style={styles.container}>
                 <View style={styles.statusBarUnderlay} />
@@ -42,6 +51,12 @@ export default class App extends React.Component {
                 <Tabs screenProps={{ month: this.state.month, allExpenses: this.state.allExpenses }} />
             </View>
         );
+    }
+
+    render() {
+        return (this.state.allExpenses && firebase.auth().currentUser)
+            ? this.renderMainContent()
+            : <Login />;
     }
 }
 
