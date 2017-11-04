@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as firebase from 'firebase';
 import { StyleSheet, Text, View, Picker, TextInput, Button, ToastAndroid } from 'react-native';
 import { categories } from '../util/constants';
+import IncomeSummary from '../components/IncomeSummary';
 
 export default class Add extends React.Component {
     state = {
@@ -24,22 +25,18 @@ export default class Add extends React.Component {
     }
 
     handleDescriptionChange = (value) => {
-        console.log('description - ' + value);
         this.setState({ description: value });
     };
 
     handleCostChange = (value) => {
-        console.log('cost - ' + value);
         this.setState({ cost: value });
     };
 
     handleCategoryChange = (value) => {
-        console.log('cateogry - ' + value);
         this.setState({ category: value });
     };
 
     handleMethodChange = (value) => {
-        console.log('method - ' + value);
         this.setState({ method: value });
     };
 
@@ -99,6 +96,7 @@ export default class Add extends React.Component {
                     <Picker.Item label="Credit" value={1} />
                 </Picker>
                 <Button style={styles.input} title="Save" color="#4CAF50" onPress={this.handleSave} />
+                <IncomeSummary monthlyExpenses={this.props.screenProps.allExpenses ? _.values(this.props.screenProps.allExpenses[this.props.screenProps.month]) : []} />
             </View>
         );
     }
@@ -110,6 +108,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#444',
         alignItems: 'stretch',
         padding: 20,
+        justifyContent: 'space-between',
+        marginBottom: 50,
     },
     title: {
         fontSize: 20,
@@ -121,6 +121,5 @@ const styles = StyleSheet.create({
     },
     input: {
         color: '#EEE',
-        marginBottom: 30,
     },
 });
