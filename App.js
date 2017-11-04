@@ -35,7 +35,7 @@ export default class App extends React.Component {
 
     loadExpenses = () => {
         firebase.database().ref('expenses').on('value', (expenses) => {
-            this.setState({ allExpenses: expenses.val() });
+            this.setState({ allExpenses: expenses.val() || [] });
         });
     }
 
