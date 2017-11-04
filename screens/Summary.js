@@ -20,37 +20,24 @@ export default class Summary extends React.Component {
     }
 
     buildData = (screenProps) => {
-        const monthlyExpenses = screenProps.allExpenses ? _.values(screenProps.allExpenses[screenProps.month]) : [];
-        const groupedByCategory = _.groupBy(monthlyExpenses, 'category');
-        let debitTotal = 0;
-        let creditTotal = 0;
         let overallTotal = 0;
+        let avgTotal = 0;
         const data = _.keys(categories).filter(c => c !== 'Income').map(c => {
-            const debit = _(groupedByCategory[c])
-                .filter({ method: 0 })
-                .map(x => Number(x.cost))
-                .values()
-                .sum();
-            const credit = _(groupedByCategory[c])
-                .filter({ method: 1 })
-                .map(x => Number(x.cost))
-                .values()
-                .sum();
-            debitTotal += debit;
-            creditTotal += credit;
-            overallTotal += (debit + credit);
+            const categoryTotalPerMonth = getTotalCostForCategoryPerMonth(screenProps.allExpenses, c);
+            const categoryTotalForCurrentMonth = categoryTotalPerMonth[screenProps.month];
+            const categoryAveragePerMonth = _.sum(categoryTotalPerMonth) / categoryTotalPerMonth.length;
+            overallTotal += categoryTotalForCurrentMonth;
+            avgTotal += categoryAveragePerMonth;
             return {
                 category: c,
-                Debit: debit,
-                Credit: credit,
-                Total: debit + credit,
+                Total: categoryTotalForCurrentMonth,
+                Avg: categoryAveragePerMonth,
             };
         });
         data.push({
             category: 'Total',
-            Debit: debitTotal,
-            Credit: creditTotal,
             Total: overallTotal,
+            Avg: avgTotal,
         });
         this.setState({ data });
     }
@@ -63,20 +50,32 @@ export default class Summary extends React.Component {
         return this.state.data.map(e => {
             return {
                 label: e.category,
-                value: e[this.state.activeDetailsItem],
+                values: [e.Total, e.Avg],
             };
         });
     }
 
     render() {
-        const items = ['Total', 'Debit', 'Credit']; //, 'Budget'];
         return (
             <View style={styles.container}>
-                <DetailsToggle activeItem={this.state.activeDetailsItem} onPress={this.handleTogglePress} items={items} />
-                <Table data={this.getTableData()}/>
+                <Table headers={['Category', 'Cost', 'Avg']} data={this.getTableData()} />
             </View>
         );
     }
+}
+
+function getTotalCostForCategoryPerMonth(expenses, category) {
+    return _(expenses)
+        .map(expensesForMonth => {
+            if (!expensesForMonth) return 0;
+        	return _(expensesForMonth)
+                .values()
+                .filter(x => x.category === category)
+                .map(c => Number(c.cost))
+                .sum();
+        })
+        .flatten()
+        .value();
 }
 
 const styles = StyleSheet.create({

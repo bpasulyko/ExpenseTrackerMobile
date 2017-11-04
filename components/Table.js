@@ -3,12 +3,13 @@ import _ from 'lodash';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { categories } from '../util/constants';
 
-const Table = ({ data = [] }) => {
+const Table = ({ headers = [], data = [] }) => {
     const renderTableHeader = () => {
         return (
             <View style={[styles.header, styles.row]}>
-                <Text style={[styles.headerCell, styles.cell]}>Category</Text>
-                <Text style={[styles.headerCell, styles.cell]}>Cost</Text>
+                {headers.map((header, key) => {
+                    return <Text key={key} style={[styles.headerCell, styles.cell]}>{header}</Text>;
+                })}
             </View>
         );
     }
@@ -20,7 +21,9 @@ const Table = ({ data = [] }) => {
         return (
             <View key={key} style={[styles.body, styles.row]}>
                 <Text style={[styles.cell, { backgroundColor: background, color: textColor }]}>{rowData.label}</Text>
-                <Text style={[styles.cell, { textAlign: 'right' }]}>{getDisplayValue(rowData.value)}</Text>
+                {rowData.values.map((value, key) => {
+                    return <Text key ={key} style={[styles.cell, styles.cost]}>{getDisplayValue(value)}</Text>;
+                })}
             </View>
         );
     }
@@ -45,14 +48,14 @@ const styles = StyleSheet.create({
     tableContainer: {
         flex: 1,
         alignSelf: 'stretch',
-        paddingHorizontal: 10,
-        marginBottom: 10,
     },
     header: {
         backgroundColor: '#2a2a2a',
+        borderWidth: 0,
     },
     headerCell: {
         color: '#EEE',
+        textAlign: 'center',
     },
     body: {
         backgroundColor: '#FFF',
@@ -66,5 +69,12 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         paddingVertical: 10,
         paddingHorizontal: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#DDD',
+    },
+    cost: {
+        textAlign: 'right',
+        borderLeftWidth: 1,
+        borderLeftColor: '#DDD',
     },
 });

@@ -33,7 +33,10 @@ export default class Details extends React.Component {
         return (
             <View style={styles.container}>
                 <DetailsToggle activeItem={this.state.activeDetailsItem} onPress={this.handleTogglePress} items={items} />
-                <Table data={this.getExpenseList().map(e => ({ label: e.category, value: Number(e.cost) }))}/>
+                <Table
+                    headers={['Category', 'Cost']}
+                    data={this.getExpenseList().map(e => ({ label: e.category, values: [Number(e.cost)] }))}
+                />
             </View>
         );
     }
