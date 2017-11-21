@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import * as firebase from 'firebase';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 import DetailsToggle from '../components/DetailsToggle';
 import Table from '../components/Table';
 import { categories } from '../util/constants';
@@ -9,6 +9,14 @@ import { categories } from '../util/constants';
 export default class Details extends React.Component {
     state = {
         activeDetailsItem: 'Debit',
+        landscape: false,
+    }
+
+    componentDidMount() {
+        Dimensions.addEventListener('change', () => {
+            const { height, width } = Dimensions.get('window');
+            this.setState({ landscape: width > height });
+        });
     }
 
     handleTogglePress = (item) => {
@@ -35,7 +43,8 @@ export default class Details extends React.Component {
                 <DetailsToggle activeItem={this.state.activeDetailsItem} onPress={this.handleTogglePress} items={items} />
                 <Table
                     headers={['Category', 'Cost']}
-                    data={this.getExpenseList().map(e => ({ label: e.category, values: [Number(e.cost)] }))}
+                    data={this.getExpenseList().map(e => ({ label: e.category, values: [Number(e.cost)], description: e.description }))}
+                    landscape={this.state.landscape}
                 />
             </View>
         );

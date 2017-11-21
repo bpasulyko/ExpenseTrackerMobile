@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { categories } from '../util/constants';
 
-const Table = ({ headers = [], data = [] }) => {
+const Table = ({ headers = [], data = [], landscape }) => {
     const renderTableHeader = () => {
         return (
             <View style={[styles.header, styles.row]}>
@@ -24,6 +24,9 @@ const Table = ({ headers = [], data = [] }) => {
                 {rowData.values.map((value, key) => {
                     return <Text key ={key} style={[styles.cell, styles.cost]}>{getDisplayValue(value)}</Text>;
                 })}
+                {rowData.description && landscape && (
+                    <Text style={styles.cell}>{rowData.description}</Text>
+                )}
             </View>
         );
     }
