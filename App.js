@@ -19,6 +19,7 @@ export default class App extends React.Component {
     state = {
         allExpenses: null,
         month: new Date().getMonth(),
+        year: 2017,
     }
 
     componentWillMount() {
@@ -34,7 +35,7 @@ export default class App extends React.Component {
     }
 
     loadExpenses = () => {
-        firebase.database().ref('expenses').on('value', (expenses) => {
+        firebase.database().ref(`expenses/${this.state.year}`).on('value', (expenses) => {
             this.setState({ allExpenses: expenses.val() || [] });
         });
     }
@@ -48,7 +49,7 @@ export default class App extends React.Component {
             <View style={styles.container}>
                 <View style={styles.statusBarUnderlay} />
                 <Header month={this.state.month} onChange={this.handleMonthChange}/>
-                <Tabs screenProps={{ month: this.state.month, allExpenses: this.state.allExpenses }} />
+                <Tabs screenProps={{ month: this.state.month, year: this.state.year, allExpenses: this.state.allExpenses }} />
             </View>
         );
     }

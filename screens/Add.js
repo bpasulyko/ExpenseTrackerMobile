@@ -53,7 +53,7 @@ export default class Add extends React.Component {
     saveExpense = (expense) => {
         var newPostKey = firebase.database().ref().child(this.props.screenProps.month).push().key;
         const updates = {};
-        updates[`expenses/${this.props.screenProps.month}/${newPostKey}`] = {
+        updates[`expenses/${this.props.screenProps.year}/${this.props.screenProps.month}/${newPostKey}`] = {
             description: expense.description,
             cost: Number(expense.cost).toFixed(2),
             category: expense.category,
