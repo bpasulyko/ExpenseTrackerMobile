@@ -1,11 +1,12 @@
 import React from 'react';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator, StackNavigator } from 'react-navigation';
 import { StyleSheet, Text, View } from 'react-native';
 import Add from '../screens/Add';
 import Details from '../screens/Details';
 import Summary from '../screens/Summary';
+import Settings from '../screens/Settings';
 
-const Tabs = TabNavigator({
+const Main = TabNavigator({
     Add: {
         screen: Add,
         navigationOptions: {
@@ -35,6 +36,15 @@ const Tabs = TabNavigator({
         style: {
             backgroundColor: '#2a2a2a',
         },
+    },
+});
+
+const Tabs = StackNavigator({
+    Root: {
+        screen: Main,
+    },
+    Settings: {
+        screen: Settings,
     },
 });
 

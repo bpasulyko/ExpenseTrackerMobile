@@ -5,8 +5,21 @@ import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 import DetailsToggle from '../components/DetailsToggle';
 import Table from '../components/Table';
 import { categories } from '../util/constants';
+import MainHeader from '../components/MainHeader';
 
 export default class Details extends React.Component {
+    static navigationOptions = ({ navigation, screenProps }) => {
+        return {
+            headerTitle: (
+                <MainHeader
+                    month={screenProps.month}
+                    onChange={screenProps.handleMonthChange}
+                    onSettingsClick={() => navigation.navigate('Settings')}
+                />
+            ),
+        };
+    };
+
     state = {
         activeDetailsItem: 'Debit',
         landscape: false,

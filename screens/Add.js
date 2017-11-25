@@ -4,8 +4,21 @@ import * as firebase from 'firebase';
 import { StyleSheet, Text, View, Picker, TextInput, Button, ToastAndroid } from 'react-native';
 import { categories } from '../util/constants';
 import IncomeSummary from '../components/IncomeSummary';
+import MainHeader from '../components/MainHeader';
 
 export default class Add extends React.Component {
+    static navigationOptions = ({ navigation, screenProps }) => {
+        return {
+            headerTitle: (
+                <MainHeader
+                    month={screenProps.month}
+                    onChange={screenProps.handleMonthChange}
+                    onSettingsClick={() => navigation.navigate('Settings')}
+                />
+            ),
+        };
+    };
+
     state = {
         description: '',
         cost: '',
@@ -109,7 +122,7 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         padding: 20,
         justifyContent: 'space-between',
-        marginBottom: 50,
+        paddingBottom: 50,
     },
     title: {
         fontSize: 20,
