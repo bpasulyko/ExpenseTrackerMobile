@@ -38,6 +38,7 @@ export default class Summary extends React.Component {
         const data = _.keys(categories).filter(c => c !== 'Income').map(c => {
             const categoryTotalPerMonth = getTotalCostForCategoryPerMonth(screenProps.allExpenses, c);
             const categoryTotalForCurrentMonth = categoryTotalPerMonth[screenProps.month];
+            categoryTotalPerMonth.pop();
             const categoryAveragePerMonth = _.sum(categoryTotalPerMonth) / categoryTotalPerMonth.length;
             overallTotal += categoryTotalForCurrentMonth;
             avgTotal += categoryAveragePerMonth;
