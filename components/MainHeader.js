@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import MonthSwitcher from './MonthSwitcher';
 
@@ -8,7 +8,9 @@ const MainHeader = ({ month, onChange, onSettingsClick }) => {
         <View style={styles.header}>
             <Text style={styles.title}>Expense Tracker</Text>
             <MonthSwitcher month={month} onChange={onChange}/>
-            <MaterialIcons name="settings" size={30} style={{ color: '#EEE' }} onPress={onSettingsClick}/>
+            <TouchableOpacity  onPress={onSettingsClick}>
+                <MaterialIcons name="settings" size={30} style={{ color: '#EEE' }}/>
+            </TouchableOpacity>
         </View>
     );
 };

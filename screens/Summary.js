@@ -16,6 +16,9 @@ export default class Summary extends React.Component {
                     onSettingsClick={() => navigation.navigate('Settings')}
                 />
             ),
+            headerStyle: {
+                elevation: 0,
+            },
         };
     };
 

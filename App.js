@@ -9,7 +9,7 @@ export default class App extends React.Component {
     state = {
         allExpenses: null,
         month: new Date().getMonth(),
-        year: 2017,
+        year: new Date().getFullYear(),
     }
 
     componentWillMount() {
@@ -19,13 +19,15 @@ export default class App extends React.Component {
     componentDidMount() {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                this.loadExpenses();
+                this.loadExpenses(this.state.year);
+            } else {
+                this.setState({ allExpenses: [] });
             }
         });
     }
 
-    loadExpenses = () => {
-        firebase.database().ref(`expenses/${this.state.year}`).on('value', (expenses) => {
+    loadExpenses = (year) => {
+        firebase.database().ref(`expenses/${year}`).on('value', (expenses) => {
             this.setState({ allExpenses: expenses.val() || [] });
         });
     }
@@ -34,11 +36,22 @@ export default class App extends React.Component {
         this.setState({ month })
     }
 
+    handleYearChange = (year) => {
+        this.setState({ year }, () => this.loadExpenses(year));
+    }
+
     renderMainContent = () => {
+        const screenProps = {
+            month: this.state.month,
+            year: this.state.year,
+            allExpenses: this.state.allExpenses,
+            handleMonthChange: this.handleMonthChange,
+            handleYearChange: this.handleYearChange,
+        };
         return (
             <View style={styles.container}>
                 <View style={styles.statusBarUnderlay} />
-                <Tabs screenProps={{ month: this.state.month, year: this.state.year, allExpenses: this.state.allExpenses, handleMonthChange: this.handleMonthChange }} />
+                <Tabs screenProps={screenProps} />
             </View>
         );
     }
