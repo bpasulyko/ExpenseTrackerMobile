@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import * as firebase from 'firebase';
 import { firebaseConfig } from './util/firebaseUtil';
 import Tabs from './navigation/Tabs';
@@ -7,6 +7,7 @@ import Login from './components/Login';
 
 export default class App extends React.Component {
     state = {
+        loading: true,
         allExpenses: null,
         month: new Date().getMonth(),
         year: new Date().getFullYear(),
@@ -21,14 +22,14 @@ export default class App extends React.Component {
             if (user) {
                 this.loadExpenses(this.state.year);
             } else {
-                this.setState({ allExpenses: [] });
+                this.setState({ allExpenses: [], loading: false });
             }
         });
     }
 
     loadExpenses = (year) => {
         firebase.database().ref(`expenses/${year}`).on('value', (expenses) => {
-            this.setState({ allExpenses: expenses.val() || [] });
+            this.setState({ allExpenses: expenses.val() || [], loading: false });
         });
     }
 
@@ -48,22 +49,34 @@ export default class App extends React.Component {
             handleMonthChange: this.handleMonthChange,
             handleYearChange: this.handleYearChange,
         };
-        return (
-            <View style={styles.container}>
-                <View style={styles.statusBarUnderlay} />
-                <Tabs screenProps={screenProps} />
-            </View>
-        );
+        if (this.state.allExpenses && firebase.auth().currentUser) {
+            return (
+                <View style={styles.container}>
+                    <View style={styles.statusBarUnderlay} />
+                    <Tabs screenProps={screenProps} />
+                </View>
+            );
+        } else {
+            return <Login />;
+        }
     }
 
     render() {
-        return (this.state.allExpenses && firebase.auth().currentUser)
-            ? this.renderMainContent()
-            : <Login />;
+        return (this.state.loading)
+            ? (
+                <View style={[styles.container, styles.spinner]}>
+                    <ActivityIndicator style={[ { transform: [{ scale: 2 }] } ]} size="large" color="#EEE" />
+                </View>
+            )
+            : this.renderMainContent();
     }
 }
 
 const styles = StyleSheet.create({
+    spinner: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     container: {
         flex: 1,
         backgroundColor: '#444',
