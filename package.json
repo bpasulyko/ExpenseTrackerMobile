@@ -9,7 +9,7 @@
     "expo": "^24.0.0",
     "react": "16.0.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz",
-    "@expo/vector-icons": "~5.0.0",
+    "@expo/vector-icons": "^6.2.1",
     "firebase": "^3.6.8",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
